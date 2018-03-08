@@ -29,23 +29,6 @@ bot.onText(/\/start/, (msg) => {
   });
 });
 
-  // Define functionality according to the start commands
-  // bot.on('message', (msg) => {
-  //   var create = "Create Alineacion";
-  //   if (msg.text.toString().toLowerCase().indexOf(Hi) === 0) {
-  //       bot.sendMessage(msg.chat.id, "/setdefenders");
-  //   }
-  //   var bye = "Bye!";
-  //   if (msg.text.toString().toLowerCase().includes(bye)) {
-  //       bot.sendMessage(msg.chat.id, "Hope to see you around again , Bye");
-  //   }    
-  //   var robot = "My Alineaciones";
-  //   if (msg.text.indexOf(robot) === 0) {
-  //       bot.sendMessage(msg.chat.id, "Yes I'm robot but not in that way!");
-  //   }
-  //});
-
-
     //Set Defenders
 bot.onText(/\/setdefenders/, (msg) => {
     bot.sendMessage(msg.chat.id, "setdefenders", {

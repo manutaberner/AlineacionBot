@@ -17,17 +17,71 @@ bot.onText(/\/start/, (msg) => {
    //send msg to the chat
     bot.sendMessage(msg.chat.id, text, keyboard);
 });
+
+
 bot.on('message', (msg) => {
-    var Hi = "hi";
-    if (msg.text.toString().toLowerCase().indexOf(Hi) === 0) {
-        bot.sendMessage(msg.chat.id, "Hello dear user");
-    }
-    var bye = "bye";
-    if (msg.text.toString().toLowerCase().includes(bye)) {
-        bot.sendMessage(msg.chat.id, "Hope to see you around again , Bye");
-    }    
-    var robot = "I'm robot";
-    if (msg.text.indexOf(robot) === 0) {
-        bot.sendMessage(msg.chat.id, "Yes I'm robot but not in that way!");
+    var Alineacion = "crear alineacion";
+    if (msg.text.toString().toLowerCase().indexOf(Alineacion) === 0) {
+        // bot.sendMessage(msg.chat.id, "Hola  " + msg.from.first_name);
+        bot.sendMessage(msg.chat.id, "/setdefenders");
     }
     });
+
+       //Set Defenders
+bot.onText(/\/setdefenders/, (msg) => {
+    var keyboard = {
+        reply_markup: JSON.stringify({
+          keyboard: [
+            ['3 Defensas',],
+            ['4 Defensas'],
+            ['5 Defensas']
+          ]
+        })
+    };  
+    //bot.sendMessage(ms)
+    bot.sendMessage(msg.chat.id, "/setdefenders");
+});
+    
+    //Set Midfielders layout
+bot.onText(/\/setmidfielderslayout/, (msg) => {
+    var keyboard = {
+        reply_markup: JSON.stringify({
+          keyboard: [
+            ['1 Linea de Centrocamistas'],
+            ['2  Lineas de Centrocamistas'],
+            ['3  Lineas de Centrocamistas']
+          ]
+        })
+    };        
+});
+      
+    //Set Midfielders
+bot.onText(/\/setmidfielders/, (msg) => {
+    var keyboard = {
+        reply_markup: JSON.stringify({
+          keyboard: [
+            ['1 Centrocampista'],
+            ['2 Centrocampistas'],
+            ['3 Centrocampistas'],
+            ['4 Centrocampistas'],
+            ['5 Centrocampistas']
+          ]
+        })
+    };
+            
+});
+
+    //Set Attackers
+bot.onText(/\/setattackers/, (msg) => {
+    var keyboard = {
+        reply_markup: JSON.stringify({
+          keyboard: [
+            ['1 Delantero'],
+            ['2 Delanteros'],
+            ['3 Delanteros']
+          ]
+        })
+    };      
+});
+
+    
