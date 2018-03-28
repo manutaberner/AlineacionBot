@@ -3,7 +3,7 @@ const TelegramBot = require('node-telegram-bot-api');
 const token = '518691232:AAGa8l0fTzvMNHcUhMdLc7rznPrj6JQRZsc';
 const bot = new TelegramBot(token, {polling: true});
 var alineacion = []; 
-//Include the goolkepeer
+//Include the goolkepeer to the array
 alineacion.push(1);
 var messagesToSend = ["/setmidfielders","/setattackers"];
 var lastMessage;
