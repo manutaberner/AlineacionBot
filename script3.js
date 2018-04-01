@@ -3,12 +3,16 @@ const TelegramBot = require('node-telegram-bot-api');
 const token = '518691232:AAGa8l0fTzvMNHcUhMdLc7rznPrj6JQRZsc';
 const bot = new TelegramBot(token, {polling: true});
 var alineacion = []; 
-//Include the goolkepeer
-alineacion.push(1);
+alineacion.push(1); //Include the goolkepeer
+var alineacionWithNames = [];
 var messagesToSend = ["/setmidfielders","/setattackers"];
-var lastMessage;
+var lastMessage; //variable used to get the last message sent
+var pointer = 0; //Pointer in the positions array
+var positionsInArray = [0,1,2,3]; //Array to use when asking for the players names
 bot.onText(/\/start/, (msg) => {
-    
+    //Restart the array with the line up
+    alineacion = [];
+    pointer=0;
     bot.sendMessage(msg.chat.id, "Welcome", {
     "reply_markup": {
         "keyboard": [["/setdefenders", "Second sample"],   ["Keyboard"], ["I'm robot"]],
@@ -18,7 +22,7 @@ bot.onText(/\/start/, (msg) => {
     });        
 });
     
-       //Set Defenders
+//Set Defenders
 bot.onText(/\/setdefenders/, (msg) => {
     bot.sendMessage(msg.chat.id, "Indicar el numero de Defensas deseado:", {
         "reply_markup": {
@@ -45,18 +49,6 @@ bot.onText(/\/setdefenders/, (msg) => {
     });
 });
 
-//Set Attackers - Not useful anymore
-bot.onText(/\/setattackers/, (msg) => {
-    bot.sendMessage(msg.chat.id, "Indicar el numero de Delanteros deseado:", {
-        "reply_markup": {
-            "keyboard": [["1 Delanteros"],["2 Delanteros"], ["3 Delanteros"]],
-            "resize_keyboard" : true,
-            "one_time_keyboard" : true
-        }
-    });
-    getLastMessage(msg);
-    console.log(alineacion);
-});
 //If the message has the word "Defensas" = Defenders
 bot.on('message', (msg) => {
     
@@ -71,9 +63,6 @@ bot.on('message', (msg) => {
     if (msg.text.toString().toLowerCase().includes(midfielders)) {
         getLastMessage(msg);
         fillLineUp(msg);
-        //bot.sendMessage(msg.chat.id,"Haga click en el mensaje para continuar");
-        //bot.sendMessage(msg.chat.id,"/setattackers"); 
-        
         } 
     });
 
@@ -105,18 +94,51 @@ function fillLineUp(msg)
     lineUpWithLines += total;
     bot.sendMessage(msg.chat.id,lineUpWithLines);
     alineacion.push(total);
+    //getPlayerNames(msg);
+    sendPlayerPosition(msg);
 }
 
 
 //Useless
-function getLineUp(msg)
+function sendPlayerPosition(msg)
 {
-    bot.sendMessage(msg.chat.id,alineacion);
-    for(var i = 0; i < alineacion.length ; i ++)
+    
+    switch (positionsInArray[pointer]) 
     {
-        for( var j = 0 ; j <alineacion[i] ; j++)
-        {
-
-        }
+        case (0) : 
+        bot.sendMessage(msg.chat.id,"Introduce el nombre del Portero:");
+        break;
+        case(1) :
+        bot.sendMessage(msg.chat.id,"Introduce el nombre del Defensa:");
+        break;
+        case(2) :
+        bot.sendMessage(msg.chat.id,"Introduce el nombre del Centrocampista:");
+        break;
+        case(3):
+        bot.sendMessage(msg.chat.id,"Introduce el nombre del Delantero:");
+        break;
     }
+    getPlayerNames(msg,pointer);
+    
+}
+
+function getPlayerNames(msg,pointer)
+{
+    console.log("Entro");
+    var counter = alineacion[pointer];
+    console.log(counter);
+    var ended = false;
+    // while(!ended)
+    // {
+    //     if(counter > 0)
+    //     {
+    //         alineacionWithNames.push(msg.text.toString());
+    //         counter--;
+    //     } else {
+    //         ended = true;
+    //         pointer ++;
+    //         sendPlayerPosition(msg,pointer);
+    //     }
+    // }
+
 }

@@ -107,4 +107,17 @@ bot.onText(/\/setattackers/, (msg) => {
     };      
 });
 
+//Set Attackers - Not useful anymore
+bot.onText(/\/setattackers/, (msg) => {
+    bot.sendMessage(msg.chat.id, "Indicar el numero de Delanteros deseado:", {
+        "reply_markup": {
+            "keyboard": [["1 Delanteros"],["2 Delanteros"], ["3 Delanteros"]],
+            "resize_keyboard" : true,
+            "one_time_keyboard" : true
+        }
+    });
+    getLastMessage(msg);
+    console.log(alineacion);
+});
+
     
