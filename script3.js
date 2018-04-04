@@ -3,15 +3,18 @@ const TelegramBot = require('node-telegram-bot-api');
 const token = '518691232:AAGa8l0fTzvMNHcUhMdLc7rznPrj6JQRZsc';
 const bot = new TelegramBot(token, {polling: true});
 var alineacion = []; 
-alineacion.push(1); //Include the goolkepeer
 var alineacionWithNames = [];
 var messagesToSend = ["/setmidfielders","/setattackers"];
-var lastMessage; //variable used to get the last message sent
+var lastMessageNumber; //used to get the last number sent
+var lastMessage; //save the last number
 var pointer = 0; //Pointer in the positions array
+var goalkeeper = 1; //Number of names for the goalkeeper
+var goalkeeperTurn = false;
 var positionsInArray = [0,1,2,3]; //Array to use when asking for the players names
 bot.onText(/\/start/, (msg) => {
     //Restart the array with the line up
     alineacion = [];
+    alineacion.push(1); //Include the goolkepeer
     pointer=0;
     bot.sendMessage(msg.chat.id, "Welcome", {
     "reply_markup": {
@@ -55,13 +58,13 @@ bot.on('message', (msg) => {
     var defenders = "defensas";
     var midfielders = "centrocampista";
     if (msg.text.toString().toLowerCase().includes(defenders)) {
-        getLastMessage(msg);
+        alineacion.push(getLastMessageNumber(msg));
         bot.sendMessage(msg.chat.id,"Haga click en el mensaje  para continuar");
         bot.sendMessage(msg.chat.id,"/setmidfielders"); 
     } 
     
     if (msg.text.toString().toLowerCase().includes(midfielders)) {
-        getLastMessage(msg);
+        alineacion.push(getLastMessageNumber(msg));
         fillLineUp(msg);
         } 
     });
@@ -75,12 +78,17 @@ function sendNextMessage(msg)
 
 }
 
-function getLastMessage(msg){
+function getLastMessageNumber(msg){
     var fullText = msg.text;
     //get the number of the to add to the Array
-    lastMessage = parseInt(fullText.substring(0,1),10);
-    alineacion.push(lastMessage);
+    lastMessageNumber = parseInt(fullText.substring(0,1),10);
+    return lastMessageNumber;
 }
+
+function getLastMessage(msg){
+    return msg.text;
+}
+
 
 function fillLineUp(msg)
 {
@@ -124,21 +132,17 @@ function sendPlayerPosition(msg)
 
 function getPlayerNames(msg,pointer)
 {
-    console.log("Entro");
     var counter = alineacion[pointer];
-    console.log(counter);
     var ended = false;
-    // while(!ended)
-    // {
-    //     if(counter > 0)
-    //     {
-    //         alineacionWithNames.push(msg.text.toString());
-    //         counter--;
-    //     } else {
-    //         ended = true;
-    //         pointer ++;
-    //         sendPlayerPosition(msg,pointer);
-    //     }
-    // }
-
+    goalkeeperTurn = true;
 }
+
+bot.on('message', (msg) => {
+    
+    //Goalkeeper
+    if(goalkeeperTurn)
+    {    
+        alineacionWithNames.push(getLastMessage(msg));
+        console.log(+"Dentro de bon on"+getLastMessage(msg));
+    }
+});
