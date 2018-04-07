@@ -13,6 +13,7 @@ var goalkeeperTurn = false;
 var positionsInArray = [0,1,2,3]; //Array to use when asking for the players names
 bot.onText(/\/start/, (msg) => {
     //Restart the array with the line up
+    lastMessage = "";
     alineacion = [];
     alineacion.push(1); //Include the goolkepeer
     pointer=0;
@@ -69,6 +70,15 @@ bot.on('message', (msg) => {
         } 
     });
 
+    //Goalkeeper
+    console.log(goalkeeperTurn);
+    if(goalkeeperTurn)
+    {    
+        alineacionWithNames.push(getLastMessage(msg));
+        console.log(+"Dentro de bon on"+getLastMessage(msg));
+        console.log(alineacionWithNames[0]);
+    }
+
 function sendNextMessage(msg)
 {
     //Return the 1st message that has to be send to make the lineup
@@ -86,6 +96,7 @@ function getLastMessageNumber(msg){
 }
 
 function getLastMessage(msg){
+    console.log("just text");
     return msg.text;
 }
 
@@ -102,7 +113,6 @@ function fillLineUp(msg)
     lineUpWithLines += total;
     bot.sendMessage(msg.chat.id,lineUpWithLines);
     alineacion.push(total);
-    //getPlayerNames(msg);
     sendPlayerPosition(msg);
 }
 
@@ -115,6 +125,8 @@ function sendPlayerPosition(msg)
     {
         case (0) : 
         bot.sendMessage(msg.chat.id,"Introduce el nombre del Portero:");
+        goalkeeperTurn = true;
+        console.log(goalkeeperTurn+"en el switch");
         break;
         case(1) :
         bot.sendMessage(msg.chat.id,"Introduce el nombre del Defensa:");
@@ -126,7 +138,7 @@ function sendPlayerPosition(msg)
         bot.sendMessage(msg.chat.id,"Introduce el nombre del Delantero:");
         break;
     }
-    getPlayerNames(msg,pointer);
+    //getPlayerNames(msg,pointer);
     
 }
 
@@ -137,12 +149,12 @@ function getPlayerNames(msg,pointer)
     goalkeeperTurn = true;
 }
 
-bot.on('message', (msg) => {
-    
-    //Goalkeeper
-    if(goalkeeperTurn)
-    {    
-        alineacionWithNames.push(getLastMessage(msg));
-        console.log(+"Dentro de bon on"+getLastMessage(msg));
-    }
-});
+// var myCallback = function(data) {
+//     console.log('got data: '+data);
+//   };
+  
+//   var usingItNow = function(callback) {
+//     callback('get it?');
+//   };
+
+//   usingItNow(myCallback);
