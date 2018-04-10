@@ -20,6 +20,7 @@ bot.onText(/\/start/, (msg) => {
 bot.onText(/\/getplayers/, (msg) => {  
     bot.sendMessage(msg.chat.id, "Por favor introduzca el nombre de los futbolistas (1 nombre por mensaje)");
     //bot send image with numbers to show how to write them
+    
 });
 
  //Send image
