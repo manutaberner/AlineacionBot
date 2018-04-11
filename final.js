@@ -5,12 +5,17 @@ const bot = new TelegramBot(token, {polling: true});
 var picLink = "http://images.all-free-download.com/images/graphiclarge/soccer_field_311115.jpg";
 var alineacionWithNames = [];
 var counter;
+var Jimp = require("jimp");
+var goalkeeperImage = "Images/goalkeeper.jpg";
+var goalkeeperPoint = [95,222];
+var test = "Remiro";
+var loadedImage ;
 bot.onText(/\/start/, (msg) => {
     //Restart the array with the line up
    alineacionWithNames = []; counter = 11;
     bot.sendMessage(msg.chat.id, "Welcome to the football line up creator!", {
     "reply_markup": {
-        "keyboard": [["/getplayers"],  ["/sendpic"],["/printlineup"]],
+        "keyboard": [["/getplayers"],["/sendpic"],["/printlineup"],["/sendpic2"]],
         "resize_keyboard" : true,
         "one_time_keyboard" : true
         }
@@ -26,6 +31,9 @@ bot.onText(/\/getplayers/, (msg) => {
  //Send image
 bot.onText(/\/sendpic/, (msg) => {  
     bot.sendPhoto(msg.chat.id, picLink);
+});
+bot.onText(/\/sendpic2/, (msg) => {  
+    bot.sendPhoto(msg.chat.id, goalkeeperImage);
 });
 bot.onText(/\/printlineup/, (msg) => {
     //for()  each to print the line up
@@ -56,3 +64,16 @@ function getLastMessage(msg){
     var fullText = msg.text;
     return fullText;
 }
+
+Jimp.read(goalkeeperImage)
+    .then(function (image) {
+        loadedImage = image;
+        return Jimp.loadFont(Jimp.FONT_SANS_16_BLACK);
+    })
+    .then(function (font) {
+        loadedImage.print(font, 10, 10, test)
+                   .write(goalkeeperImage);
+    })
+    .catch(function (err) {
+        console.error(err);
+    });
