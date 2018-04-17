@@ -6,7 +6,8 @@ var picLink = "http://images.all-free-download.com/images/graphiclarge/soccer_fi
 var alineacionWithNames = [];
 var counter;
 var Jimp = require("jimp");
-var goalkeeperImage = "Images/goalkeeper.jpg";
+var goalkeeperImage = "Images/goalkeeper.jpg"; 
+var goalkeeperImagetoPrint = goalkeeperImage;
 var goalkeeperPoint = [95,222];
 var test = "Remiro";
 var loadedImage ;
@@ -32,15 +33,13 @@ bot.onText(/\/getplayers/, (msg) => {
 bot.onText(/\/sendpic/, (msg) => {  
     bot.sendPhoto(msg.chat.id, picLink);
 });
-bot.onText(/\/sendpic2/, (msg) => {  
-    bot.sendPhoto(msg.chat.id, goalkeeperImage);
+bot.onText(/\/sendGoalkeeperPic/, (msg) => {  
+    bot.sendPhoto(msg.chat.id, goalkeeperImagetoPrint);
 });
 bot.onText(/\/printlineup/, (msg) => {
     //for()  each to print the line up
     bot.sendMessage(msg.chat.id, "Por favor introduzca el nombre de los futbolistas (1 nombre por mensaje)");
 });
-
-
 
 
 bot.on('message', (msg) => {
@@ -65,14 +64,14 @@ function getLastMessage(msg){
     return fullText;
 }
 
-Jimp.read(goalkeeperImage)
+Jimp.read(goalkeeperImagetoPrint)
     .then(function (image) {
         loadedImage = image;
         return Jimp.loadFont(Jimp.FONT_SANS_16_BLACK);
     })
     .then(function (font) {
         loadedImage.print(font, 10, 10, test)
-                   .write(goalkeeperImage);
+                   .write(goalkeeperImagetoPrint);
     })
     .catch(function (err) {
         console.error(err);
