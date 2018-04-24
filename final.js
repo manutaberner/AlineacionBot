@@ -14,19 +14,27 @@ var goalkeeperImagetoPrint = goalkeeperImage;
 var goalkeeperPoint = [85,222];
 var loadedImage;
 var imagesToPrint = ["Images/goalkeeper.jpg","Images/4_defenders.jpg","Images/3_midfilders.jpg","Images/3_attackers.jpg"];
-var jimps = [];
+var midfildersImages = ["Images/3_midfilders.jpg"];
+var createImage = [];
 
+//get all the images into the array
+for(var i=0; i< imagesToPrint.length; i++)
+{
+    createImage.push(Jimp.read(imagesToPrint[i]));
+}
 
 bot.onText(/\/start/, (msg) => {
     //Restart the array with the line up
    alineacionWithNames = []; counter = 11;
     bot.sendMessage(msg.chat.id, "Welcome to the football line up creator!", {
     "reply_markup": {
-        "keyboard": [["/getplayers"],["/sendpic"],["/printlineup"],["/sendGoalkeeperPic"]],
+        "keyboard": [["/getplayers"],["/4_3_3"],["/printlineup"],["/sendGoalkeeperPic"]],
         "resize_keyboard" : true,
         "one_time_keyboard" : true
         }
-    });        
+    });
+    bot.sendMessage(msg.chat.id,"Please select a line up");
+    joinImages();     
 });
 
 bot.onText(/\/getplayers/, (msg) => {  
@@ -35,13 +43,9 @@ bot.onText(/\/getplayers/, (msg) => {
     
 });
 
- //Send image
-bot.onText(/\/sendpic/, (msg) => {  
-    bot.sendPhoto(msg.chat.id, picLink);
-});
-
- bot.onText(/\/test/, (msg) => {  
+ bot.onText(/\/4_3_3/, (msg) => {  
     console.log("Portero: "+alineacionWithNames[0]);
+    bot.sendPhoto(msg.chat.id,"Images/fullImage.jpg");
 });
 
 bot.onText(/\/sendGoalkeeperPic/, (msg) => {  
@@ -83,16 +87,9 @@ bot.on('message', (msg) => {
 
 function getLastMessage(msg){
     var fullText = msg.text;
-    console.log("Guardo en variable:" +fullText);
     return fullText;
 }
 
-
-//get al the images into the array
-for(var i=0; i< imagesToPrint.length; i++)
-{
-    jimps.push(Jimp.read(imagesToPrint[i]));
-}
 
 //Jimp fuction that prints the name of the goalkeeper
 function printGoalkeeperNameOnImage(testName){
@@ -111,8 +108,40 @@ Jimp.read(goalkeeperImagetoPrint)
     
 }
 
-function printMidfildersName()
+function printMidfildersName(midfildersNumber)
 {
     //first clone the image
 
+}
+
+function printAttackersName(attackersNumber)
+{
+
+    //Change to suit the midfilders switch for each case
+    for(var i = 0; i<attackersNumber; i++)
+    {
+        Jimp.read(goalkeeperImagetoPrint)
+        .then(function (image) {
+            loadedImage = image;
+            return Jimp.loadFont(Jimp.FONT_SANS_16_BLACK);
+        })
+        .then(function (font) {
+            loadedImage.print(font, 75, 222, testName)
+                       .write(goalkeeperImagetoPrint);
+        })
+        .catch(function (err) {
+            console.error(err);
+        });
+        
+    }
+}
+
+function joinImages(){
+Promise.all(createImage).then(function(data){
+    return Promise.all(createImage);
+}).then(function(data){
+    data[0].composite(data[1],0,0);
+    data[0].composite(data[2],0,0);
+    data[0].write("Images/fullImage.jpg");
+});
 }
