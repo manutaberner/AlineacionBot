@@ -13,8 +13,8 @@ var goalkeeperImage = "Images/goalkeeper.jpg";
 var goalkeeperImagetoPrint = goalkeeperImage;
 var goalkeeperPoint = [85,222];
 var loadedImage;
-var imagesToPrint = ["Images/goalkeeper.jpg","Images/4_defenders.jpg","Images/3_midfilders.jpg","Images/3_attackers.jpg"];
-var midfildersImages = ["Images/3_midfilders.jpg"];
+var imagesToPrint = ["Images/goalkeeper.jpg","Images/4_defenders.png","Images/3_midfilders.png","Images/3_attackers.png"];
+var midfildersImages = ["Images/3_midfilders.png"];
 var createImage = [];
 
 //get all the images into the array
@@ -45,7 +45,7 @@ bot.onText(/\/getplayers/, (msg) => {
 
  bot.onText(/\/4_3_3/, (msg) => {  
     console.log("Portero: "+alineacionWithNames[0]);
-    bot.sendPhoto(msg.chat.id,"Images/fullImage.jpg");
+    bot.sendPhoto(msg.chat.id,"Images/fullImage.png");
 });
 
 bot.onText(/\/sendGoalkeeperPic/, (msg) => {  
@@ -142,6 +142,6 @@ Promise.all(createImage).then(function(data){
 }).then(function(data){
     data[0].composite(data[1],0,0);
     data[0].composite(data[2],0,0);
-    data[0].write("Images/fullImage.jpg");
+    data[0].write("Images/fullImage.png");
 });
 }
