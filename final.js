@@ -58,6 +58,7 @@ bot.onText(/\/sendGoalkeeperPic/, (msg) => {
     printGoalkeeperNameOnImage("Jose Luis");
     bot.sendPhoto(msg.chat.id, goalkeeperImagetoPrint);
 });
+
 bot.onText(/\/printlineup/, (msg) => {
     //for()  each to print the line up
     // alineacionWithNames.forEach(element => {
@@ -142,6 +143,7 @@ Promise.all(createImage).then(function(data){
 }).then(function(data){
     data[0].composite(data[1],0,0);
     data[0].composite(data[2],0,0);
+    data[0].composite(data[3],0,0);
     data[0].write("Images/fullImage.png");
 });
 }
