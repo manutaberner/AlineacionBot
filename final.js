@@ -8,7 +8,8 @@ var Jimp = require("jimp");
 var Waterfall = require('async-waterfall');
 var picLink = "http://images.all-free-download.com/images/graphiclarge/soccer_field_311115.jpg";
 var alineacionWithNames = [];
-var counter;
+var counter; //counter for the 11 players
+var storeNames = false; 
 var goalkeeperImage = "Images/goalkeeper.jpg"; 
 var goalkeeperImagetoPrint = goalkeeperImage;
 var goalkeeperPoint = [85,222];
@@ -33,19 +34,16 @@ bot.onText(/\/start/, (msg) => {
         "one_time_keyboard" : true
         }
     });
-    bot.sendMessage(msg.chat.id,"Please select a line up");
-    joinImages();     
-});
-
-bot.onText(/\/getplayers/, (msg) => {  
-    bot.sendMessage(msg.chat.id, "Por favor introduzca el nombre de los futbolistas (1 nombre por mensaje)");
-    //bot send image with numbers to show how to write them
-    
+    bot.sendMessage(msg.chat.id,"Por favor eliga una alineacion:");     
 });
 
  bot.onText(/\/4_3_3/, (msg) => {  
-    console.log("Portero: "+alineacionWithNames[0]);
-    bot.sendPhoto(msg.chat.id,"Images/fullImage.png");
+    bot.sendMessage(msg.chat.id,"Por favor introduzca los nombres en el orden indicado en la imagen")
+    bot.sendPhoto(msg.chat.id,"Images/"+getLastMessage(msg).substring(1)+"_numbers.png");
+    bot.sendMessage(msg.chat.id,"Haga click en el mensaje  para continuar");
+    bot.sendMessage(msg.chat.id,"/getplayers"); 
+    joinImages(getLastMessage(msg).substring(1));
+    
 });
 
 bot.onText(/\/sendGoalkeeperPic/, (msg) => {  
@@ -70,12 +68,18 @@ bot.onText(/\/printlineup/, (msg) => {
     }
 });
 
+bot.onText(/\/getplayers/, (msg) => {  
+    bot.sendMessage(msg.chat.id, "Por favor introduzca el nombre de los futbolistas (1 nombre por mensaje)");
+    storeNames = true;
+});
+
+//Gets the name of the players
 bot.on('message', (msg) => {
     var notCommand = "/";
     if (msg.text.toString().toLowerCase().includes(notCommand)) 
         {
             console.log("It's a command");
-        } else if(counter > 0)
+        } else if(counter > 0 && storeNames)
         {
             alineacionWithNames.push(getLastMessage(msg));
             counter --;
@@ -83,6 +87,7 @@ bot.on('message', (msg) => {
         else if (counter === 0)
         {
             bot.sendMessage(msg.chat.id, "Alineacion completa!");
+            storeNames = false;
         }
 });
 
@@ -137,13 +142,19 @@ function printAttackersName(attackersNumber)
     }
 }
 
-function joinImages(){
-Promise.all(createImage).then(function(data){
-    return Promise.all(createImage);
-}).then(function(data){
-    data[0].composite(data[1],0,0);
-    data[0].composite(data[2],0,0);
-    data[0].composite(data[3],0,0);
-    data[0].write("Images/fullImage.png");
-});
+function joinImages()
+{
+    Promise.all(createImage).then(function(data){
+        return Promise.all(createImage);
+    }).then(function(data){
+        data[0].composite(data[1],0,0);
+        data[0].composite(data[2],0,0);
+        data[0].composite(data[3],0,0);
+        data[0].write("Images/fullImage.png");
+    });
+}
+
+function msgToArray(messageToArray)
+{
+    
 }
