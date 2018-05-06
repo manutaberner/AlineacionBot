@@ -4,6 +4,7 @@ const token = '518691232:AAGa8l0fTzvMNHcUhMdLc7rznPrj6JQRZsc';
 const bot = new TelegramBot(token, {polling: true});
 //library to manage images
 var Jimp = require("jimp");
+var tools = require('./line_ups.js');
 //library to manage asynchronity
 var Waterfall = require('async-waterfall');
 var picLink = "http://images.all-free-download.com/images/graphiclarge/soccer_field_311115.jpg";
@@ -17,6 +18,7 @@ var loadedImage;
 var imagesToPrint = ["Images/goalkeeper.jpg","Images/4_defenders.png","Images/3_midfilders.png","Images/3_attackers.png"];
 var midfildersImages = ["Images/3_midfilders.png"];
 var createImage = [];
+var alineacionInMessage;
 
 //get all the images into the array
 for(var i=0; i< imagesToPrint.length; i++)
@@ -29,7 +31,7 @@ bot.onText(/\/start/, (msg) => {
    alineacionWithNames = []; counter = 11;
     bot.sendMessage(msg.chat.id, "Welcome to the football line up creator!", {
     "reply_markup": {
-        "keyboard": [["/getplayers"],["/4_3_3"],["/printlineup"],["/sendGoalkeeperPic"]],
+        "keyboard": [["/getplayers"],["/4_3_3"],["/printlineup"]],
         "resize_keyboard" : true,
         "one_time_keyboard" : true
         }
@@ -40,21 +42,13 @@ bot.onText(/\/start/, (msg) => {
  bot.onText(/\/4_3_3/, (msg) => {  
     bot.sendMessage(msg.chat.id,"Por favor introduzca los nombres en el orden indicado en la imagen")
     bot.sendPhoto(msg.chat.id,"Images/"+getLastMessage(msg).substring(1)+"_numbers.png");
+    alineacionInMessage = getLastMessage(msg).substring(1);
     bot.sendMessage(msg.chat.id,"Haga click en el mensaje  para continuar");
     bot.sendMessage(msg.chat.id,"/getplayers"); 
     joinImages(getLastMessage(msg).substring(1));
+    console.log("alineacion: "+ alineacionInMessage);
+    msgToVariables(alineacionInMessage);
     
-});
-
-bot.onText(/\/sendGoalkeeperPic/, (msg) => {  
-    //Check if the Array is empty 
-    // if(alineacionWithNames.length==0)
-    // {
-    //     bot.sendMessage(msg.chat.id,"Please fill 1st the line up");
-    // }
-    //Llamar a la funcion de imprimir pasando nombre del portero como parametro, alineacionWithNames[0] y msg para poder imprimir el mensaje con la foto.
-    printGoalkeeperNameOnImage("Jose Luis");
-    bot.sendPhoto(msg.chat.id, goalkeeperImagetoPrint);
 });
 
 bot.onText(/\/printlineup/, (msg) => {
@@ -154,7 +148,12 @@ function joinImages()
     });
 }
 
-function msgToArray(messageToArray)
+//Store lineup chosen into an Array
+function msgToVariables(messageToVariables)
 {
-    
+    var defendersNumber = messageToVariables.substring(0,1);
+    // console.log(defendersNumber);
+    var midfildersNumber= messageToVariables.substring(2,3);
+    // console.log(midfildersNumber);
+    var attackersNumber= messageToVariables.substring(4,5);
 }
