@@ -10,7 +10,9 @@ var fullYArray; //Array storing the Y coordinates
 
 function addCoordinatesDefenders(numberOfDefenders) 
 {
-    //Switch for the defenders
+    //Add the goalkeepers Coordinates
+    fullXArray.push(goalkeeperPoint[0]);
+    fullYArray.push(goalkeeperPoint[1]);
     switch (numberOfDefenders) {
         case 4:
         for (let i = 0 ; i < numberOfDefenders ; i++)
@@ -60,22 +62,10 @@ function addCoordinatesAttackers(numberOfAttackers)
     }
 }
 
+getFullXArray = function(){
+    return fullXArray;
+}
 
-
-function printNameOnImage(fullXArray, fullYArray, ){
-    for (let index = 0; index < fullXArray.length; index++) 
-    {
-        Jimp.read(goalkeeperImagetoPrint)
-        .then(function (image) {
-            loadedImage = image;
-            return Jimp.loadFont(Jimp.FONT_SANS_16_BLACK);
-        })
-        .then(function (font) {
-            loadedImage.print(font, fullXArray[index], fullYArray[index], testName)
-                       .write(goalkeeperImagetoPrint);
-        })
-        .catch(function (err) {
-            console.error(err);
-        });       
-    }        
+getFullYArray = function(){
+    return fullYArray;
 }
