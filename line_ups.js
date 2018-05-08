@@ -15,9 +15,6 @@ function emptyArray(arrayToEmpty)
 
 var methods = {};
 
-methods.getFullXArray = function () {return fullXArray};
-methods.getFullYArray = function () {return fullYArray};
-
 methods.addCoordinatesDefenders =function(numberOfDefenders){
     //Empty the array just in case
     emptyArray(fullXArray); emptyArray(fullYArray);
@@ -25,7 +22,7 @@ methods.addCoordinatesDefenders =function(numberOfDefenders){
     fullXArray.push(goalkeeperPoint[0]);
     fullYArray.push(goalkeeperPoint[1]);
     switch (numberOfDefenders) {
-        case 4:
+        case "4":
             for (let i = 0 ; i < numberOfDefenders ; i++)
             {
                 fullXArray.push(array4Defenders[0][i]);
@@ -41,7 +38,8 @@ methods.addCoordinatesDefenders =function(numberOfDefenders){
 methods.addCoordinatesMidfilders =function(numberOfMidfilders){
     //Switch for the defenders
     switch (numberOfMidfilders) {
-        case 3:
+        
+        case "3":
             for (let i = 0 ; i < numberOfMidfilders ; i++)
             {
                 fullXArray.push(array3Midfilders[0][i]);
@@ -57,7 +55,7 @@ methods.addCoordinatesMidfilders =function(numberOfMidfilders){
 methods.addCoordinatesAttackers =function(numberOfAttackers){
     //Switch for the defenders
     switch (numberOfAttackers) {
-        case 3:
+        case "3":
             for (let i = 0 ; i < numberOfAttackers ; i++)
             {
                 fullXArray.push(array3Attackers[0][i]);
@@ -70,5 +68,7 @@ methods.addCoordinatesAttackers =function(numberOfAttackers){
     }
 };
 
+methods.getFullXArray = function () {return fullXArray};
+methods.getFullYArray = function () {return fullYArray};
 
 exports.data = methods;
