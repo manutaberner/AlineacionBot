@@ -1,0 +1,7 @@
+
+\.idea/
+
+config/config.json
+node_modules/
+
+Images/fullImage\.jpg

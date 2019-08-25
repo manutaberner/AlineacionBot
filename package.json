@@ -1,0 +1,14 @@
+{
+  "name": "alineacion-bot",
+  "description": "Bot that helps generating football line ups.",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LordHub/AlineacionBot.git"
+  },
+  "dependencies": {
+    "node-telegram-bot-api": "^0.30.0",
+    "jimp": "^0.6.4",
+    "async-waterfall": "^0.1.5"
+  }
+}
