@@ -5,9 +5,10 @@ const bot = new TelegramBot(config.token, {polling: true});
 // Library to manage images
 var Jimp = require("jimp");
 var tools = require('./line_ups.js');
+var crypto = require("crypto");
 // Asynchronous calls
 var Waterfall = require('async-waterfall');
-var picLink = "http://images.all-free-download.com/images/graphiclarge/soccer_field_311115.jpg";
+const picLink = "http://images.all-free-download.com/images/graphiclarge/soccer_field_311115.jpg";
 var alineacionWithNames = [];
 var counter; //counter for the 11 players
 var storeNames = false; 
@@ -166,29 +167,43 @@ function joinImages()
 
 function printNamesOnImage( fullXArray , fullYArray , msg){
 
+    let randomImageName = "Images/" + generateRandomName() + ".jpg";
+    let promises = [];
+
      for (let index = 0; index < fullXArray.length; index++)
     {
         let cordX = fullXArray[index];
-        console.log("Coordinate X:", cordX);
         let cordY = fullYArray[index];
-        console.log("Coordinate Y:", cordY);
         let nameToPrint = alineacionWithNames[index].toString();
-        console.log("Name to print:", nameToPrint);
+        promises.push(new Promise((resolve, reject) => {
+            // Add promise that writes on the image
+            Jimp.read(imageLoaded)
+                .then(function (image) {
+                    loadedImage = image;
+                    return Jimp.loadFont(Jimp.FONT_SANS_16_BLACK);
+                })
+                .then(function (font) {
+                    resolve(loadedImage.print(font, cordX, cordY, nameToPrint)
+                        .write(randomImageName));
+                })
+                .catch(function (err) {
+                    console.error(err);
+                    reject();
+                });
+            })
+        )
 
-        Jimp.read(imageLoaded)
-        .then(function (image) {
-            loadedImage = image;
-            return Jimp.loadFont(Jimp.FONT_SANS_16_BLACK);
+    }
+    Promise.all(promises)
+        .then(() => {
+            return bot.sendPhoto(msg.chat.id, randomImageName);
         })
-        .then(function (font) {
-            loadedImage.print(font, cordX, cordY, nameToPrint)
-                       .write("Images/fullImage.jpg");
+        .then(() => {
+            // Remove image
         })
         .catch(function (err) {
             console.error(err);
         });
-    }
-    bot.sendPhoto(msg.chat.id, imageLoaded);
 }
 
 //Store lineup chosen into an Array
@@ -197,4 +212,8 @@ function msgToVariables(messageToVariables)
     defendersNumber = messageToVariables.substring(0,1);
     midfildersNumber = messageToVariables.substring(2,3);
     attackersNumber = messageToVariables.substring(4,5);
+}
+
+function generateRandomName() {
+    return crypto.randomBytes(20).toString('hex');
 }

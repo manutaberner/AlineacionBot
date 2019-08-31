@@ -9,6 +9,7 @@
   "dependencies": {
     "node-telegram-bot-api": "^0.30.0",
     "jimp": "^0.6.4",
-    "async-waterfall": "^0.1.5"
+    "async-waterfall": "^0.1.5",
+    "crypto": "^1.0.1"
   }
 }
