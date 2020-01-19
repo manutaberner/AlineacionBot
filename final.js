@@ -196,6 +196,9 @@ function printNamesOnImage( fullXArray , fullYArray , msg){
     }
     Promise.all(promises)
         .then(() => {
+            console.log('sending', randomImageName);
+            // Restart the counter
+            counter = 0;
             return bot.sendPhoto(msg.chat.id, randomImageName);
         })
         .then(() => {
