@@ -32,9 +32,27 @@ bot.start((ctx) => {
 });
 
 bot.command('4_3_3', (ctx) => {
-
+    // TODO convert to function
+    return ref.child("users/" + chatId).set({
+        listening: true,
+        latest_formation: '4_3_3',
+        counter: 0
+    }).then((result) => {
+        return ctx.reply('Has elegido la formacion 4 3 3');
+    }).then((result) => {
+        return ctx.reply('Inserte un jugador por mensaje como en la siguiente imagen:');
+    }).then((result) => {
+        return ctx.replyWithPhoto({ source: bucket.refFromURL('gs://alineacion-bot.appspot.com/fullImage.png') });
+    })
+    .catch((error) => {
+        console.error(error);
+        return false;
+    });
 });
+// Listen to all messages
+
 // ctx.telegram.sendPhoto(, {source: '../../assets/img/db_20180503_095807_867.jpg'})
+
 
 bot.launch()
     .catch((error) => {
