@@ -3,7 +3,16 @@ Bot for Telegram written in Nodejs
 
 This Bot allows the user to create football line-ups.
 
-To use it:
-1.Clone the repo 
-2.Open the Nodejs command pront and go to the previous location
-3. Execute the script with: node ----.js
+**How to use the bot:**
+* Start conversation in Telegram with : `@AlineacionBot` 
+* Select desired lineup
+* Introduce the name of the players in order
+* Get your image!
+
+**Future works** 
+* Add option to create line ups 
+* Select the color of the jerseys
+* Multilingual
+
+Donate:
+

@@ -9,8 +9,9 @@ const db = admin.database();
 const ref = db.ref("/");
 const bucket = admin.storage().bucket();
 
+
 bot.start((ctx) => {
-    const chatId = ctx.chat.id
+    const chatId = ctx.chat.id;
 
     return ref.child(`users/${chatId}`).once("value", snapshot => {
         if (snapshot.exists()) {
@@ -42,6 +43,7 @@ bot.command('4_3_3', (ctx) => {
     }).then((result) => {
         return ctx.reply('Inserte un jugador por mensaje como en la siguiente imagen:');
     }).then((result) => {
+        // TODO check if there's a better way to fetch the url
         return ctx.replyWithPhoto({ source: bucket.refFromURL('gs://alineacion-bot.appspot.com/fullImage.png') });
     })
     .catch((error) => {
@@ -50,8 +52,32 @@ bot.command('4_3_3', (ctx) => {
     });
 });
 // Listen to all messages
+bot.on('text', (ctx) => {
+    return ref.child(`users/${chatId}`).once("value", snapshot => {
+        let userCount  = parseInt(snapshot.child('counter').value);
+        // TODO Check if the counter < 11 and listening
+        if (snapshot.child('listening') && userCount < 11) {
+            return ref.child("users/" + chatId).set({
+                counter:  userCount + 1,
+                favourite_line_up: '',
+                username: ctx.message.from.username
+            });
+        } else {
+            return false;
+        }
+    })
+    .then((result) => {
+        // Check if the line up is full
+        // TODO check how to fetch the counter from the result
+    })
+    .then((result) => {
+        // Fetch the lineup and players and create image in a different function
 
-// ctx.telegram.sendPhoto(, {source: '../../assets/img/db_20180503_095807_867.jpg'})
+    })
+    .catch((error) => {
+        console.error(error);
+    })
+});
 
 
 bot.launch()
@@ -84,4 +110,8 @@ exports.bot = functions.https.onRequest((req, res) => {
 
 function getProfile(chatId) {
     return ref.child("users/" + chatId).get();
+}
+
+function setLineup(lineup){
+
 }
