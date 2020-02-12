@@ -2,8 +2,8 @@ const Telegraf = require('telegraf');
 const functions = require('firebase-functions');
 const admin = require("firebase-admin");
 admin.initializeApp(functions.config().firebase);
-
-const bot = new Telegraf(''); // TODO insert telegram bot token
+// Initialize bot using key in firebase
+const bot = new Telegraf(functions.config().service.telegram_key);
 
 const db = admin.database();
 const ref = db.ref("/");
@@ -22,7 +22,8 @@ bot.start((ctx) => {
                 counter: 0,
                 created_at: Date.now(),
                 favourite_line_up: '',
-                username: ctx.message.from.username
+                username: ctx.message.from.username,
+                listening: 0
             });
             return ctx.reply('Bienvenido a  Alineacion Bot');
         }
@@ -33,16 +34,18 @@ bot.start((ctx) => {
 });
 
 bot.command('4_3_3', (ctx) => {
+    const chatId = ctx.chat.id;
     // TODO convert to function
-    return ref.child("users/" + chatId).set({
-        listening: true,
+    return ref.child("users/" + chatId).update({
+        listening: 1,
         latest_formation: '4_3_3',
-        counter: 0
-    }).then((result) => {
+        counter: 0,
+        players: []
+    }).then(() => {
         return ctx.reply('Has elegido la formacion 4 3 3');
-    }).then((result) => {
+    }).then(() => {
         return ctx.reply('Inserte un jugador por mensaje como en la siguiente imagen:');
-    }).then((result) => {
+    }).then(() => {
         // TODO check if there's a better way to fetch the url
         return ctx.replyWithPhoto({ source: bucket.refFromURL('gs://alineacion-bot.appspot.com/fullImage.png') });
     })
@@ -51,29 +54,43 @@ bot.command('4_3_3', (ctx) => {
         return false;
     });
 });
+bot.command('test_image', (ctx) => {
+    return ctx.replyWithPhoto({ source: bucket.refFromURL('gs://alineacion-bot.appspot.com/fullImage.png')})
+        .catch((error) => {
+            console.error(error);
+            return false;
+        });
+});
+
 // Listen to all messages
 bot.on('text', (ctx) => {
+    const chatId = ctx.chat.id;
     return ref.child(`users/${chatId}`).once("value", snapshot => {
-        let userCount  = parseInt(snapshot.child('counter').value);
-        // TODO Check if the counter < 11 and listening
-        if (snapshot.child('listening') && userCount < 11) {
-            return ref.child("users/" + chatId).set({
+        let userCount  = parseInt(snapshot.child('counter').val());
+        // TODO Check if the counter < 11 and listening (create function)
+        console.info('User count', userCount);
+        // todo parseInt(snapshot.child('listening').val()) === 1
+        if ( userCount < 11 ) {
+            return ref.child("users/" + chatId).update({
                 counter:  userCount + 1,
-                favourite_line_up: '',
-                username: ctx.message.from.username
             });
         } else {
-            return false;
+            return ctx.reply('La alineacion esta completa');
+            //todo reject
         }
     })
     .then((result) => {
         // Check if the line up is full
         // TODO check how to fetch the counter from the result
+        console.log(result);
+        const message = ctx.message.from.username;
+        ref.child("users/" + chatId + '/players').push(message.substring(0, 20));
+        return result;
     })
-    .then((result) => {
-        // Fetch the lineup and players and create image in a different function
-
-    })
+    // .then((result) => {
+    //     // Fetch the lineup and players and create image in a different function
+    //
+    // })
     .catch((error) => {
         console.error(error);
     })
