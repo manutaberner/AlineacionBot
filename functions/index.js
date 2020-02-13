@@ -54,6 +54,7 @@ bot.command('4_3_3', (ctx) => {
         return false;
     });
 });
+
 bot.command('test_image', (ctx) => {
     return ctx.replyWithPhoto({ source: bucket.refFromURL('gs://alineacion-bot.appspot.com/fullImage.png')})
         .catch((error) => {
